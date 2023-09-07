@@ -15,16 +15,39 @@ ROUTER_TEMPLATE_GUIDE_HEIGHT =
 
 BRACKET_WIDTH = 49;
 BRACKET_DEPTH = 13;
-BRACKET_HEIGHT = 5;
+BRACKET_HEIGHT = 6;
 // BRACKET_HEIGHT = 2;
 
 SCREW_HEAD_HEIGHT = 3;
 SCREW_HEAD_DIAMETER = 6.88;
 SCREW_THREAD_DIAMETER = 3.5;
 
-PEG_DIAMETER = 7.5;
-PEG_HEIGHT = 65;
+// PEG_DIAMETER = 7.5;
+// drill bit was 65mm long, need to subtract bracket pocket depth
+// PEG_HEIGHT = 65 - BRACKET_HEIGHT;
 // PEG_HEIGHT = 4;
+
+BOLT_TOTAL_LENGTH = 61.8;
+BOLT_DIAMETER = 5.85;
+BOLT_HEAD_DIAMETER = 16.7;
+BOLT_HEAD_HEIGHT = 2.3;
+BOLT_CONE_HEIGHT = 1.7;
+BOLT_CONE_TOP_DIAMETER = 8.0;
+
+// Make the bolt stick out a little bit so that the screws apply pressure
+// between the bracket and the wall
+BOLT_PRESSURE_OFFSET = 0.3;
+
+module bolt() {
+  // main bolt
+  cylinder(h = BOLT_TOTAL_LENGTH, r = BOLT_DIAMETER / 2);
+  // conical part
+  translate([ 0, 0, BOLT_HEAD_HEIGHT ])
+      cylinder(h = BOLT_CONE_HEIGHT, r1 = BOLT_CONE_TOP_DIAMETER / 2,
+               r2 = BOLT_DIAMETER / 2);
+  // head
+  cylinder(h = BOLT_HEAD_HEIGHT, r = BOLT_HEAD_DIAMETER / 2);
+}
 
 PLANK_THICKNESS = 19;
 PLANK_WIDTH = 90.5;
@@ -136,11 +159,20 @@ module bracket() {
               true, 6, "z");
         }
       }
-      rotate([ 2, 0, 0 ]) translate(
-          [ 0, 0, PEG_HEIGHT / -2 - (BRACKET_HEIGHT + FRICTION_OFFSET) ])
-          cylinder(h = PEG_HEIGHT, r = (PEG_DIAMETER / 2) - FRICTION_OFFSET,
-                   center = true);
+      // Peg waa too loose when subtracting 0.3mm friction offset from the
+      // radius. Increased radius by 0.2mm to make it a tighter fit.
+      // IMPORTANT - Have to translate z down a tiny bit when rotating otherwise
+      // there's a little gap
+      // translate([ 0, 0, 0.3 ]) rotate([ 2, 0, 0 ])
+      // translate([ 0, 0, PEG_HEIGHT / -2 - (BRACKET_HEIGHT + FRICTION_OFFSET)
+      // ])
+      //     cylinder(h = PEG_HEIGHT, r = (PEG_DIAMETER / 2) - 0.1, center =
+      //     true);
+
+      // translate([ 0, 0, BOLT_PRESSURE_OFFSET ]) rotate([ 180, 0, 0 ]) bolt();
     }
+
+    translate([ 0, 0, BOLT_PRESSURE_OFFSET ]) rotate([ 180, 0, 0 ]) bolt();
 
     translate([ BRACKET_WIDTH / 2 - 7, 0, 0 ]) countersunk_screw_hole();
     translate([ BRACKET_WIDTH / -2 + 7, 0, 0 ]) countersunk_screw_hole();
@@ -155,6 +187,8 @@ module plank() {
 
 // plank();
 bracket();
+
+// bolt();
 
 // countersunk_screw_hole();
 
