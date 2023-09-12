@@ -1,6 +1,6 @@
 include <base.scad>;
 
-ADAPTER_THICKNESS = 1.5;
+ADAPTER_THICKNESS = 2;
 
 // VACUUM_ADAPTER_BASE_DIAMETER = 46.2;
 // VACUUM_ADAPTER_TIP_DIAMETER = 44.6;
@@ -16,13 +16,13 @@ VACUUM_ADAPTER_OUTER_TOP_DIAMETER =
 VACUUM_ADAPTER_LENGTH = 60;
 VACUUM_ADAPTER_THICKNESS = 2.75;
 
-MIDDLE_HEIGHT = 10;
+MIDDLE_HEIGHT = 15;
 
 ADAPTER_GROOVE_HEIGHT = 3;
 ADAPTER_GROOVE_RING_HEIGHT = 2;
 ADAPTER_GROOVE_DIAMETER = 38.3 + 4;
 
-ADAPTER_LENGTH = 13;
+ADAPTER_LENGTH = 23;
 ADAPTER_TIP_INNER_DIAMETER = 39.4 + 4;
 ADAPTER_TIP_OUTER_DIAMETER = ADAPTER_TIP_INNER_DIAMETER + 2 * ADAPTER_THICKNESS;
 
@@ -82,23 +82,50 @@ difference() {
   slot_z_offset = 8;
   union() {
     move_up(VACUUM_ADAPTER_LENGTH + MIDDLE_HEIGHT + slot_radius) {
-      translate([ 0, -ADAPTER_BASE_OUTER_DIAMETER * 2, 0 ]) {
-        // bottom circle
-        rotate([ 270, 0, 0 ])
-            cylinder(h = ADAPTER_BASE_OUTER_DIAMETER * 5, r = slot_radius);
-      }
+      for (deg = [ 0, 120, 240 ]) {
+        rotate([ 0, 0, deg ]) {
+          // bottom circle
+          rotate([ 90, 0, 0 ])
+              cylinder(h = ADAPTER_BASE_OUTER_DIAMETER, r = slot_radius);
 
-      translate([ 0, -ADAPTER_BASE_OUTER_DIAMETER / 2, 0 ]) {
-        move_up((ADAPTER_LENGTH + ADAPTER_GROOVE_RING_HEIGHT) / 2) {
-          cube(
-              [
-                slot_radius * 2, ADAPTER_BASE_OUTER_DIAMETER * 5,
-                ADAPTER_LENGTH +
-                ADAPTER_GROOVE_RING_HEIGHT
-              ],
-              center = true);
+          translate([ 0, -ADAPTER_BASE_OUTER_DIAMETER / 2, 0 ]) {
+            move_up((ADAPTER_LENGTH + ADAPTER_GROOVE_RING_HEIGHT) / 2) {
+              cube(
+                  [
+                    slot_radius * 2, ADAPTER_BASE_OUTER_DIAMETER,
+                    ADAPTER_LENGTH +
+                    ADAPTER_GROOVE_RING_HEIGHT
+                  ],
+                  center = true);
+            }
+          }
         }
       }
     }
   }
 }
+
+// slot_radius = 8;
+// slot_z_offset = 8;
+// union() {
+//   move_up(VACUUM_ADAPTER_LENGTH + MIDDLE_HEIGHT + slot_radius) {
+//     for (deg = [ 0, 120, 240 ]) {
+//       rotate([ 0, 0, deg ]) {
+//         // bottom circle
+//         rotate([ 90, 0, 0 ])
+//             cylinder(h = ADAPTER_BASE_OUTER_DIAMETER, r = slot_radius);
+
+//         translate([ 0, -ADAPTER_BASE_OUTER_DIAMETER / 2, 0 ]) {
+//           move_up((ADAPTER_LENGTH + ADAPTER_GROOVE_RING_HEIGHT) / 2) {
+//             cube(
+//                 [
+//                   slot_radius * 2, ADAPTER_BASE_OUTER_DIAMETER,
+//                   ADAPTER_LENGTH + ADAPTER_GROOVE_RING_HEIGHT
+//                 ],
+//                 center = true);
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
