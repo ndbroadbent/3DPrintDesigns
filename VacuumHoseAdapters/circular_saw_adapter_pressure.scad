@@ -72,9 +72,9 @@ difference() {
     // threaded_tube(d = OUTER_DIAMETER_50MM, pitch = PITCH_50MM,
     //               h = VACUUM_ADAPTER_LENGTH);
 
-    // tube(h = VACUUM_ADAPTER_LENGTH, thickness = ADAPTER_THICKNESS,
-    //      d1 = VACUUM_ADAPTER_OUTER_BOTTOM_DIAMETER,
-    //      d2 = VACUUM_ADAPTER_OUTER_TOP_DIAMETER);
+    tube(h = VACUUM_ADAPTER_LENGTH, thickness = ADAPTER_THICKNESS,
+         d1 = VACUUM_ADAPTER_OUTER_BOTTOM_DIAMETER,
+         d2 = VACUUM_ADAPTER_OUTER_TOP_DIAMETER);
   }
 
   // Slot
