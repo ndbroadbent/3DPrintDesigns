@@ -51,7 +51,7 @@ module head_extension_nut() {
              h = 3.5 + 3, $fn = 6);
 
     translate([ 0, 0, -EPSILON / 2 ]) metric_thread(
-        diameter = 12 + 0.4, pitch = 1.75, length = HEAD_EXT_HEIGHT * 2);
+        diameter = 12 + 0.55, pitch = 1.75, length = HEAD_EXT_HEIGHT * 2);
   }
 }
 
