@@ -47,14 +47,14 @@ module head_extension() {
 
 module head_extension_nut() {
   difference() {
-    cylinder(r = (BOLT_HEAD_DIAMETER / 2 * HEX_FACTOR) - TOLERANCE, h = 3.5,
-             $fn = 6);
+    cylinder(r = (BOLT_HEAD_DIAMETER / 2 * HEX_FACTOR) - TOLERANCE - 1,
+             h = 3.5 + 5, $fn = 6);
 
     translate([ 0, 0, -EPSILON / 2 ]) metric_thread(
-        diameter = 12, pitch = 1.75, length = HEAD_EXT_HEIGHT * 2);
+        diameter = 12 + 0.75, pitch = 1.75, length = HEAD_EXT_HEIGHT * 2);
   }
 }
 
-head_extension();
-// translate([ 0, 0, -10 ]) head_extension_nut();
+// head_extension();
+head_extension_nut();
 // bolt();
