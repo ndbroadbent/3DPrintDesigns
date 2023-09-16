@@ -1,3 +1,5 @@
+use <../lib/threads.scad>;
+
 $fn = $preview ? 15 : 100;
 EPSILON = 0.01;
 TOLERANCE = 0.5;
@@ -28,21 +30,31 @@ module head_extension() {
   difference() {
     cylinder(r = (HEAD_EXT_WIDTH / 2 * HEX_FACTOR) - TOLERANCE,
              h = HEAD_EXT_HEIGHT, $fn = 6);
-    translate([ 0, 0, -EPSILON / 2 ])
-        cylinder(h = HEAD_EXT_HEIGHT + EPSILON,
-                 r = BOLT_THREAD_DIAMETER / 2 + TOLERANCE / 2);
+
+    // Can't use a thread here since the head needs to be pushed all the way
+    // into the hole. Use superglue instead.
+    // translate([ 0, 0, -EPSILON / 2 ]) metric_thread(
+    //     diameter = 12, pitch = 1.75, length = HEAD_EXT_HEIGHT * 2);
+
+    cylinder(h = HEAD_EXT_HEIGHT + EPSILON,
+             r = BOLT_THREAD_DIAMETER / 2 + TOLERANCE / 2);
 
     translate([ 0, 0, -EPSILON ]) cylinder(
-        h = HEAD_EXT_HEIGHT / 2,
+        h = HEAD_EXT_HEIGHT * 0.75,
         r = (BOLT_HEAD_DIAMETER / 2 * HEX_FACTOR) + TOLERANCE / 2, $fn = 6);
   }
 }
 
-module thumb_screw() {
-  // translate([ 0, 0, BOLT_HEIGHT - THUMB_SCREW_HEIGHT ]) {
-  cylinder([ BOLT_THREAD_DIAMETER / 2, THUMB_SCREW_HEIGHT ], $fn = 6);
-  // }
+module head_extension_nut() {
+  difference() {
+    cylinder(r = (BOLT_HEAD_DIAMETER / 2 * HEX_FACTOR) - TOLERANCE, h = 3.5,
+             $fn = 6);
+
+    translate([ 0, 0, -EPSILON / 2 ]) metric_thread(
+        diameter = 12, pitch = 1.75, length = HEAD_EXT_HEIGHT * 2);
+  }
 }
 
 head_extension();
+// translate([ 0, 0, -10 ]) head_extension_nut();
 // bolt();
