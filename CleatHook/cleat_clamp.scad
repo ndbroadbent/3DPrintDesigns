@@ -1,3 +1,4 @@
+$fn = $preview ? 15 : 120;
 module hole(l) {
   difference() {
     rotate([ 90, 0, 0 ]) cylinder(r = 6, h = l * 1.5, center = true);
@@ -17,14 +18,15 @@ difference() {
   union() {
     difference() {
       top();
-      translate([ 0, 0, -3 ]) hole(14.2, $fn = 24);
+      translate([ 0, 0, -3 ]) hole(14.2);
     }
-    center($fn = 48);
-    base($fn = 48);
+    center();
+    base();
   }
   for (a = [ -1, +1 ]) {
-    translate([ a * 10, 0, 0 ]) cylinder(r = 4 / 2, h = 50, center = true);
-    translate([ a * 10, 0, +4 ])
+    translate([ a * 10, 0, 0 ]) scale([ 1.5, 1.5, 1 ])
+        cylinder(r = 4 / 2, h = 50, center = true);
+    translate([ a * 10, 0, +4 ]) scale([ 1.5, 1.5, 1 ])
         cylinder(r1 = 4 / 2, r2 = 10 / 2, h = 3, center = true);
   }
 }
