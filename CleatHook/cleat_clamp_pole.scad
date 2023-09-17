@@ -79,7 +79,7 @@ scale(0.5582) difference() {
   // }
 }
 
-rotate([ 0, 0, 90 ]) translate([ 0, 0, -28.3 ]) {
+rotate([ 0, 0, 90 ]) translate([ 0, 0, -28.8 ]) {
   difference() {
     rotate([ 90, 0, 0 ]) cylinder(r = 21, h = 9.2, center = true);
     rotate([ 90, 0, 0 ]) cylinder(r = 16.6 + 0.4, h = 12, center = true);
