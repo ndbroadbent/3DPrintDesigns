@@ -69,12 +69,21 @@ scale(0.5582) difference() {
       translate([ 0, 0, -3 ]) hole(14.2);
     }
     center();
-    base();
+    // base();
   }
-  for (a = [ -1, +1 ]) {
-    translate([ a * 10, 0, 0 ]) scale([ 1.5, 1.5, 1 ])
-        cylinder(r = 4 / 2, h = 50, center = true);
-    translate([ a * 10, 0, +4 ]) scale([ 1.5, 1.5, 1 ])
-        cylinder(r1 = 4 / 2, r2 = 10 / 2, h = 3, center = true);
+  // for (a = [ -1, +1 ]) {
+  //   translate([ a * 10, 0, 0 ]) scale([ 1.5, 1.5, 1 ])
+  //       cylinder(r = 4 / 2, h = 50, center = true);
+  //   translate([ a * 10, 0, +4 ]) scale([ 1.5, 1.5, 1 ])
+  //       cylinder(r1 = 4 / 2, r2 = 10 / 2, h = 3, center = true);
+  // }
+}
+
+rotate([ 0, 0, 90 ]) translate([ 0, 0, -28.3 ]) {
+  difference() {
+    rotate([ 90, 0, 0 ]) cylinder(r = 21, h = 9.2, center = true);
+    rotate([ 90, 0, 0 ]) cylinder(r = 16.6 + 0.4, h = 12, center = true);
+    translate([ 0, 0, -12 ]) rotate(45)
+        cylinder(h = 20, r1 = 23, r2 = 5, center = true, $fn = 4);
   }
 }
