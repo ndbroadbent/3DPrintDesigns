@@ -79,11 +79,13 @@ scale(0.5582) difference() {
   // }
 }
 
-rotate([ 0, 0, 90 ]) translate([ 0, 0, -28.8 ]) {
+rotate([ 0, 0, 90 ]) translate([ 0, 0, -20.3 ]) {
   difference() {
-    rotate([ 90, 0, 0 ]) cylinder(r = 21, h = 9.2, center = true);
-    rotate([ 90, 0, 0 ]) cylinder(r = 16.6 + 0.4, h = 12, center = true);
+    rotate([ 90, 0, 0 ])
+        cylinder(r = 21.5 / 2, h = 9.2, center = true, $fn = 60);
+    rotate([ 90, 0, 0 ])
+        cylinder(r = (16.6 + 0.5) / 2, h = 12, center = true, $fn = 60);
     translate([ 0, 0, -12 ]) rotate(45)
-        cylinder(h = 20, r1 = 23, r2 = 5, center = true, $fn = 4);
+        cylinder(h = 20, r1 = 22, r2 = 5, center = true, $fn = 4);
   }
 }
