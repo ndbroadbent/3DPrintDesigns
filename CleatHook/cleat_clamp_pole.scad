@@ -84,7 +84,7 @@ rotate([ 0, 0, 90 ]) translate([ 0, 0, -20.3 ]) {
     rotate([ 90, 0, 0 ])
         cylinder(r = 21.5 / 2, h = 9.2, center = true, $fn = 60);
     rotate([ 90, 0, 0 ])
-        cylinder(r = (16.6 + 0.5) / 2, h = 12, center = true, $fn = 60);
+        cylinder(r = (16 + 0.3) / 2, h = 30, center = true, $fn = 60);
     translate([ 0, 0, -12 ]) rotate(45)
         cylinder(h = 20, r1 = 22, r2 = 5, center = true, $fn = 4);
   }
