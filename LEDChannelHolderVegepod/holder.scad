@@ -3,7 +3,7 @@ EPSILON = 0.01;
 TOLERANCE = 0.3;
 
 CHANNEL_WIDTH = 14;
-CHANNEL_HEIGHT = 7;
+CHANNEL_HEIGHT = 7 + 0.5;
 BRACKET_LENGTH = 21.5;
 
 THICKNESS = 2.5;
@@ -14,16 +14,33 @@ RING_ANGLE = 0;
 difference() {
   union() {
     difference() {
-      cube(
-          [
-            CHANNEL_WIDTH + THICKNESS * 2, BRACKET_LENGTH, CHANNEL_HEIGHT +
-            THICKNESS
-          ],
-          center = true);
+      union() {
+        cube(
+            [
+              CHANNEL_WIDTH + THICKNESS * 2, BRACKET_LENGTH, CHANNEL_HEIGHT +
+              THICKNESS
+            ],
+            center = true);
+        translate([ 0, 0, (CHANNEL_HEIGHT + THICKNESS) / 2 + THICKNESS / 4 ])
+            cube(
+                [
+                  CHANNEL_WIDTH + THICKNESS * 2, BRACKET_LENGTH, THICKNESS / 2
+                ],
+                center = true);
+      }
 
       translate([ 0, 0, THICKNESS / 2 ]) cube(
           [
             CHANNEL_WIDTH + TOLERANCE, BRACKET_LENGTH + 10, CHANNEL_HEIGHT +
+            EPSILON
+          ],
+          center = true);
+
+      // top holder notches
+      translate([ 0, 0, THICKNESS ]) cube(
+          [
+            CHANNEL_WIDTH + TOLERANCE - 0.8 * 2, BRACKET_LENGTH + 10,
+            CHANNEL_HEIGHT +
             EPSILON
           ],
           center = true);
@@ -43,7 +60,7 @@ difference() {
 
 module ring_hollow() {
   rotate([ 90, 0, 0 ])
-      cylinder(r = (16 + 0.4) / 2, h = 30, center = true, $fn = 60);
+      cylinder(r = (16 + 0.3) / 2, h = 30, center = true, $fn = 60);
 }
 
 module ring() {
