@@ -26,8 +26,8 @@ difference() {
   cylinder(h = height - EPSILON,
            r = knob_diameter / 2 + BOLT_HOLE_TOLERANCE / 2, $fn = 25);
   translate([ 0, 0, -EPSILON / 2 ]) {
-    cylinder(h = height + EPSILON,
-             r = BOLT_THREAD_DIAMETER / 2 + TOLERANCE / 2);
+    // cylinder(h = height + EPSILON,
+    //          r = BOLT_THREAD_DIAMETER / 2 + TOLERANCE / 2);
 
     translate([ 0, 0, -lid_height ])
         cylinder(h = height,

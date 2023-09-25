@@ -3,9 +3,11 @@ set -euo pipefail
 
 OPENSCAD_BIN="/Applications/OpenSCAD.app/Contents/MacOS/OpenSCAD"
 
+BUILD_DIR="build_single"
+
 for LETTER in $(echo {A..Z}); do
   FILENAME="organizer_${LETTER}.stl"
-  if [ -f "./build/${FILENAME}" ]; then
+  if [ -f "./$BUILD_DIR/${FILENAME}" ]; then
     echo "=> $FILENAME already exists..."
     continue
   fi
@@ -14,6 +16,6 @@ for LETTER in $(echo {A..Z}); do
   $OPENSCAD_BIN \
     -D "letter=\"${LETTER}\"" \
     --render \
-    -o "./build/${FILENAME}" \
+    -o "./$BUILD_DIR/${FILENAME}" \
     organizer.scad
  done
