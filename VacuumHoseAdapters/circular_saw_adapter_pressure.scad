@@ -1,6 +1,6 @@
 include <base.scad>;
 
-ADAPTER_THICKNESS = 2;
+ADAPTER_THICKNESS = 3.5;
 
 // VACUUM_ADAPTER_BASE_DIAMETER = 46.2;
 // VACUUM_ADAPTER_TIP_DIAMETER = 44.6;
@@ -34,18 +34,34 @@ ADAPTER_GROOVE_RING_DIAMETER =
 ADAPTER_BASE_OUTER_DIAMETER =
     ADAPTER_BASE_INNER_DIAMETER + 2 * ADAPTER_THICKNESS;
 
+BASE_SLOPE_HEIGHT = 10;
+
 difference() {
   union() {
     move_up(VACUUM_ADAPTER_LENGTH) {
       move_up(MIDDLE_HEIGHT) {
         move_up(ADAPTER_LENGTH) {
+          // Lip
           difference() {
-            cylinder(h = ADAPTER_GROOVE_RING_HEIGHT,
-                     r = ADAPTER_TIP_OUTER_DIAMETER / 2 + 2);
+            union() {
+              cylinder(h = ADAPTER_GROOVE_RING_HEIGHT,
+                       r1 = ADAPTER_TIP_OUTER_DIAMETER / 2 + 2,
+                       r2 = ADAPTER_TIP_OUTER_DIAMETER / 2 + 2);
+              translate([ 0, 0, -2 - BASE_SLOPE_HEIGHT ])
+                  cylinder(h = ADAPTER_GROOVE_RING_HEIGHT + BASE_SLOPE_HEIGHT,
+                           r1 = ADAPTER_TIP_OUTER_DIAMETER / 2,
+                           r2 = ADAPTER_TIP_OUTER_DIAMETER / 2 + 2);
+
+
+            }
             translate([ 0, 0, -EPSILON / 2 ]) {
               cylinder(h = ADAPTER_LENGTH,
                        r = ADAPTER_TIP_INNER_DIAMETER / 2 - 2);
             }
+              translate([ 0, 0, -EPSILON / 2 - 2 - BASE_SLOPE_HEIGHT ]) {
+                cylinder(h = 2 + EPSILON + BASE_SLOPE_HEIGHT,
+                         r = ADAPTER_TIP_INNER_DIAMETER / 2);
+              }            
           }
         }
 
