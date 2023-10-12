@@ -3,12 +3,13 @@ EPSILON = 0.01;
 
 BORDER_RADIUS = 8;
 FULL_WIDTH = 255;
-PLATE_THICKNESS = 2;
+PLATE_THICKNESS = 2.5;
 TAB_HEIGHT = 64;
-TAB_WIDTH = 60;
+// TAB_WIDTH = 122;
+TAB_WIDTH = 124;
 FONT_SIZE = 30;
 
-letter = "A";
+letter = "S-U";
 level = 1;
 
 module draw_letter(letter) {
@@ -35,10 +36,10 @@ difference() {
     TAB_WIDTH / 2, TAB_HEIGHT / 2 * 0.96 + (TAB_HEIGHT * (level - 1)),
     -EPSILON / 2
   ]) draw_letter(letter);
-  translate([
-    FULL_WIDTH - (TAB_WIDTH / 2),
-    TAB_HEIGHT / 2 * 0.96 + (TAB_HEIGHT * (level - 1)), -EPSILON / 2
-  ]) mirror([ 1, 0, 0 ]) draw_letter(letter);
+  // translate([
+  //   FULL_WIDTH - (TAB_WIDTH / 2),
+  //   TAB_HEIGHT / 2 * 0.96 + (TAB_HEIGHT * (level - 1)), -EPSILON / 2
+  // ]) mirror([ 1, 0, 0 ]) draw_letter(letter);
 
   // translate([ TAB_WIDTH, TAB_HEIGHT, -EPSILON / 2 ])
   //     hull() for (x = [
