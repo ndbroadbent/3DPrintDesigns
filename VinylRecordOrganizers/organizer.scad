@@ -2,19 +2,18 @@ $fn = $preview ? 15 : 100;
 EPSILON = 0.01;
 
 BORDER_RADIUS = 8;
-FULL_WIDTH = 255;
-PLATE_THICKNESS = 2.5;
-TAB_HEIGHT = 64;
-// TAB_WIDTH = 122;
-TAB_WIDTH = 124;
-FONT_SIZE = 30;
+FULL_WIDTH = 250;
+PLATE_THICKNESS = 2;
+TAB_HEIGHT = 40;
+TAB_WIDTH = 74;
+FONT_SIZE = 18;
 
-letter = "S-U";
+chars = "S-U";
 level = 1;
 
-module draw_letter(letter) {
+module draw_chars(chars) {
   linear_extrude(height = PLATE_THICKNESS + EPSILON)
-      text(text = letter, font = "Lintsec:style=Regular", size = FONT_SIZE,
+      text(text = chars, font = "Lintsec:style=Regular", size = FONT_SIZE,
            halign = "center", valign = "center");
 }
 
@@ -35,7 +34,7 @@ difference() {
   translate([
     TAB_WIDTH / 2, TAB_HEIGHT / 2 * 0.96 + (TAB_HEIGHT * (level - 1)),
     -EPSILON / 2
-  ]) draw_letter(letter);
+  ]) draw_chars(chars);
   // translate([
   //   FULL_WIDTH - (TAB_WIDTH / 2),
   //   TAB_HEIGHT / 2 * 0.96 + (TAB_HEIGHT * (level - 1)), -EPSILON / 2
