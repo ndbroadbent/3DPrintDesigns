@@ -1,4 +1,4 @@
-$fn = $preview ? 25 : 100;
+$fn = $preview ? 15 : 100;
 EPSILON = 0.01;
 
 bottom_radius = 102.5 / 2;
@@ -13,8 +13,8 @@ bottom_indent_thickness = 1.6;
 lip_thickness = 5;
 lip_radius = bottom_radius - bottom_thickness + lip_thickness;
 lip_height = 3;
-lip_notch_width = 2.3;
-lip_notch_height = 2.6;
+lip_notch_width = 2.3 + 0.5;
+lip_notch_height = 2.6 + 0.4;
 lip_spacing = 45;
 lip_taper_length = 34.6;
 lip_taper_initial_height = 1.8;
