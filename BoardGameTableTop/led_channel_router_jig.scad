@@ -20,7 +20,7 @@ BRACKET_DEPTH = 14;
 
 // BRACKET_HEIGHT = 2;
 
-PLANK_THICKNESS = 19;
+PLANK_THICKNESS = 19 + 7;
 PLANK_WIDTH = 135;
 PLANK_LENGTH = 330;
 
@@ -47,7 +47,7 @@ module jig() {
     cube([ jig_width, jig_depth, jig_height ], true);
 
     // Inner cut out for the router bit + guide
-    cube(
+    translate([ 0, 7 / 2, 0 ]) cube(
         [
           bracket_template_width + FRICTION_OFFSET,
           bracket_template_depth + FRICTION_OFFSET, NOTCH_DEPTH + guide_height +
