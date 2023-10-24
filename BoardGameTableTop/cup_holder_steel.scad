@@ -14,7 +14,8 @@ BOTTOM_RADIUS = 7;
 OUTER_DIAMETER = INNER_DIAMETER + 2 * THICKNESS;  // = 91mm
 OUTER_HEIGHT = INNER_HEIGHT + THICKNESS;
 // RIM_DIAMETER = LIP_WIDTH * 2 + OUTER_DIAMETER;
-RIM_DIAMETER = 101;
+
+RIM_DIAMETER = 101 + (5 * 2);
 
 module rounded_cylinder(h, r) {
   cylinder(h = h, r = r - h / 2, center = true);
