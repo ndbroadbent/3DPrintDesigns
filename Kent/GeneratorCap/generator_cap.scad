@@ -11,8 +11,10 @@ module copy_rotate(vec) {
   rotate(vec) children();
 }
 
-LID_THICKNESS = 3.6;
+// Need to add 1mm so it's not such a sharp angle, easier to print
+LID_THICKNESS = 3.6 + 1;
 LID_EDGE_THICKNESS = 1.35;
+
 LID_DIAMETER = 249;
 LID_CHAMFER_LENGTH = 5.4;
 LID_CHAMFER_THICKNESS = LID_THICKNESS - LID_EDGE_THICKNESS;
@@ -22,54 +24,93 @@ HANDLE_TOP_LENGTH = 168;
 HANDLE_HEIGHT = 14;
 HANDLE_BOTTOM_WIDTH = 16.6;
 HANDLE_TOP_WIDTH = 15;
-HANDLE_LENGTH_DIFF = (HANDLE_BOTTOM_LENGTH - HANDLE_TOP_LENGTH) / 2;
-HANDLE_WIDTH_DIFF = (HANDLE_BOTTOM_WIDTH - HANDLE_TOP_WIDTH) / 2;
 
 // Top lid
 module lid() {
   cylinder(h = LID_EDGE_THICKNESS, d = LID_DIAMETER);
   translate([ 0, 0, LID_EDGE_THICKNESS ])
-      cylinder(h = LID_THICKNESS, d1 = LID_DIAMETER,
+      cylinder(h = LID_THICKNESS - LID_EDGE_THICKNESS, d1 = LID_DIAMETER,
                d2 = LID_DIAMETER - LID_CHAMFER_LENGTH * 2);
 }
 
-HandlePoints = [
-  [ 0, 0, 0 ],                                               // 0
-  [ 0, HANDLE_BOTTOM_LENGTH, 0 ],                            // 1
-  [ HANDLE_BOTTOM_WIDTH, HANDLE_BOTTOM_LENGTH, 0 ],          // 2
-  [ HANDLE_BOTTOM_WIDTH, 0, 0 ],                             // 3
-  [ HANDLE_WIDTH_DIFF, HANDLE_LENGTH_DIFF, HANDLE_HEIGHT ],  // 4
-  [
-    HANDLE_WIDTH_DIFF, HANDLE_BOTTOM_LENGTH - HANDLE_LENGTH_DIFF,
-    HANDLE_HEIGHT
-  ],  // 5
-  [
-    HANDLE_TOP_WIDTH + HANDLE_WIDTH_DIFF,
-    HANDLE_BOTTOM_LENGTH - HANDLE_LENGTH_DIFF,
-    HANDLE_HEIGHT
-  ],  // 6
-  [ HANDLE_TOP_WIDTH + HANDLE_WIDTH_DIFF, HANDLE_LENGTH_DIFF, HANDLE_HEIGHT ]
-];  // 7
+module test_strip() {
+  translate([ 0, 0, LID_THICKNESS / 2 ]) cube(
+      [ HANDLE_BOTTOM_LENGTH + 20, HANDLE_BOTTOM_WIDTH + 20, LID_THICKNESS ],
+      center = true);
+}
 
-HandleFaces = [
-  [ 0, 1, 2, 3 ],  // bottom
-  [ 4, 5, 1, 0 ],  // front
-  [ 7, 6, 5, 4 ],  // top
-  [ 5, 6, 2, 1 ],  // right
-  [ 6, 7, 3, 2 ],  // back
-  [ 7, 4, 0, 3 ]
-];  // left
+module handle(tolerance = 0) {
+  bottom_length = HANDLE_BOTTOM_LENGTH + tolerance * 2;
+  bottom_width = HANDLE_BOTTOM_WIDTH + tolerance * 2;
+  top_length = HANDLE_TOP_LENGTH + tolerance * 2;
+  top_width = HANDLE_TOP_WIDTH + tolerance * 2;
 
-// Lid handle (inset into the lid so it can be super glued in place)
-module handle() {
-  translate([ 0, 0, LID_THICKNESS ]) {
+  bottom_length_shrunk = HANDLE_BOTTOM_LENGTH - tolerance * 2;
+  bottom_width_shrunk = HANDLE_BOTTOM_WIDTH - tolerance * 2;
+  top_length_shrunk = HANDLE_TOP_LENGTH - tolerance * 2;
+  top_width_shrunk = HANDLE_TOP_WIDTH - tolerance * 2;
+
+  handle_length_diff = (bottom_length - top_length) / 2;
+  handle_width_diff = (bottom_width - top_width) / 2;
+
+  // Lid handle (inset into the lid so it can be super glued in place)
+  HANDLE_CUBE_LENGTH_MARGIN = 15 + (tolerance * 0.5);
+  HANDLE_CUBE_WIDTH_MARGIN = 5 + (tolerance * 0.5);
+  HANDLE_RECT_INSET_COUNT = 4;
+  total_margins = HANDLE_RECT_INSET_COUNT + 1;
+  total_margin_length = HANDLE_CUBE_LENGTH_MARGIN * total_margins;
+  total_rect_length = bottom_length_shrunk - total_margin_length;
+  rect_length = total_rect_length / HANDLE_RECT_INSET_COUNT;
+  rect_plus_margin = rect_length + HANDLE_CUBE_LENGTH_MARGIN;
+
+  HandlePoints = [
+    [ 0, 0, 0 ],                                               // 0
+    [ 0, bottom_length, 0 ],                                   // 1
+    [ bottom_width, bottom_length, 0 ],                        // 2
+    [ bottom_width, 0, 0 ],                                    // 3
+    [ handle_width_diff, handle_length_diff, HANDLE_HEIGHT ],  // 4
+    [
+      handle_width_diff, bottom_length - handle_length_diff,
+      HANDLE_HEIGHT
+    ],  // 5
+    [
+      HANDLE_TOP_WIDTH + handle_width_diff, bottom_length - handle_length_diff,
+      HANDLE_HEIGHT
+    ],  // 6
+    [ HANDLE_TOP_WIDTH + handle_width_diff, handle_length_diff, HANDLE_HEIGHT ]
+  ];  // 7
+
+  HandleFaces = [
+    [ 0, 1, 2, 3 ],  // bottom
+    [ 4, 5, 1, 0 ],  // front
+    [ 7, 6, 5, 4 ],  // top
+    [ 5, 6, 2, 1 ],  // right
+    [ 6, 7, 3, 2 ],  // back
+    [ 7, 4, 0, 3 ]
+  ];  // left
+
+  translate([ 0, 0, LID_THICKNESS + EPSILON ]) {
     rotate([ 0, 0, 90 ]) {
-      translate([ HANDLE_BOTTOM_WIDTH / -2, HANDLE_BOTTOM_LENGTH / -2, 0 ]) {
+      translate([ bottom_width / -2, bottom_length / -2, 0 ]) {
         polyhedron(HandlePoints, HandleFaces);
-        translate([ 0, 0, -LID_CHAMFER_THICKNESS ]) cube([
-          HANDLE_BOTTOM_WIDTH, HANDLE_BOTTOM_LENGTH,
-          LID_CHAMFER_THICKNESS
-        ]);
+        translate([ 0, 0, -LID_CHAMFER_THICKNESS ]) difference() {
+          cube([ bottom_width, bottom_length, LID_CHAMFER_THICKNESS ]);
+
+          for (i = [ 0, 1, 2, 3 ]) {
+            translate([
+              HANDLE_CUBE_WIDTH_MARGIN +
+                  (bottom_width - bottom_width_shrunk) / 2,
+              HANDLE_CUBE_LENGTH_MARGIN + (rect_plus_margin * i) +
+                  (bottom_length - bottom_length_shrunk) / 2,
+              -EPSILON
+            ])
+                cube([
+                  bottom_width_shrunk - HANDLE_CUBE_WIDTH_MARGIN * 2,
+                  rect_length,
+                  LID_CHAMFER_THICKNESS
+                ]);
+          }
+        }
       }
     }
   }
@@ -228,7 +269,15 @@ module bottom_circle() {
 
 // difference() {
 //   lid();
-//   scale([ 1.01, 1.01, 1.01 ]) handle();
+//   handle(0.2);
 // }
 // bottom_circle();
+
+// difference() {
+//   test_strip();
+//   handle(0.2);
+// }
+
 handle();
+
+// lid();
