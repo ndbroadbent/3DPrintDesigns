@@ -27,10 +27,11 @@ HANDLE_TOP_WIDTH = 15;
 
 // Top lid
 module lid() {
-  cylinder(h = LID_EDGE_THICKNESS, d = LID_DIAMETER);
-  translate([ 0, 0, LID_EDGE_THICKNESS ])
-      cylinder(h = LID_THICKNESS - LID_EDGE_THICKNESS, d1 = LID_DIAMETER,
-               d2 = LID_DIAMETER - LID_CHAMFER_LENGTH * 2);
+  cylinder(h = LID_THICKNESS - LID_EDGE_THICKNESS,
+           d1 = LID_DIAMETER - LID_CHAMFER_LENGTH * 2, d2 = LID_DIAMETER);
+
+  translate([ 0, 0, LID_THICKNESS - LID_EDGE_THICKNESS ])
+      cylinder(h = LID_EDGE_THICKNESS, d = LID_DIAMETER);
 }
 
 module test_strip() {
@@ -267,17 +268,17 @@ module bottom_circle() {
   }
 }
 
-// difference() {
-//   lid();
-//   handle(0.2);
-// }
-// bottom_circle();
+difference() {
+  lid();
+  handle(0.5);
+}
+bottom_circle();
 
 // difference() {
 //   test_strip();
 //   handle(0.2);
 // }
 
-handle();
+// handle();
 
 // lid();
