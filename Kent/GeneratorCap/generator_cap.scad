@@ -55,13 +55,16 @@ module handle(tolerance = 0) {
   handle_width_diff = (bottom_width - top_width) / 2;
 
   // Lid handle (inset into the lid so it can be super glued in place)
+  circle_diameter = 8 - tolerance;
+
   HANDLE_CUBE_LENGTH_MARGIN = 15 + (tolerance * 0.5);
   HANDLE_CUBE_WIDTH_MARGIN = 5 + (tolerance * 0.5);
-  HANDLE_RECT_INSET_COUNT = 4;
+  HANDLE_RECT_INSET_COUNT = 3;
   total_margins = HANDLE_RECT_INSET_COUNT + 1;
   total_margin_length = HANDLE_CUBE_LENGTH_MARGIN * total_margins;
   total_rect_length = bottom_length_shrunk - total_margin_length;
   rect_length = total_rect_length / HANDLE_RECT_INSET_COUNT;
+
   rect_plus_margin = rect_length + HANDLE_CUBE_LENGTH_MARGIN;
 
   HandlePoints = [
@@ -97,19 +100,19 @@ module handle(tolerance = 0) {
         translate([ 0, 0, -LID_CHAMFER_THICKNESS ]) difference() {
           cube([ bottom_width, bottom_length, LID_CHAMFER_THICKNESS ]);
 
-          for (i = [ 0, 1, 2, 3 ]) {
+          for (i = [ 0, -1, 1 ]) {
             translate([
-              HANDLE_CUBE_WIDTH_MARGIN +
-                  (bottom_width - bottom_width_shrunk) / 2,
-              HANDLE_CUBE_LENGTH_MARGIN + (rect_plus_margin * i) +
-                  (bottom_length - bottom_length_shrunk) / 2,
+              bottom_width / 2,
+              bottom_length/2 + i * bottom_length/3,
               -EPSILON
             ])
-                cube([
-                  bottom_width_shrunk - HANDLE_CUBE_WIDTH_MARGIN * 2,
-                  rect_length,
-                  LID_CHAMFER_THICKNESS
-                ]);
+                // cube([
+                //   bottom_width_shrunk - HANDLE_CUBE_WIDTH_MARGIN * 2,
+                //   rect_length,
+                //   LID_CHAMFER_THICKNESS
+                // ]);
+                cylinder(h = LID_CHAMFER_THICKNESS, d = circle_diameter,
+                         center = false);
           }
         }
       }
@@ -127,6 +130,12 @@ BOTTOM_DIVIDER_LINE_THICKNESS = 1.9;
 BOTTOM_DIVIDER_LINE_HEIGHT = 8.6;
 
 module bottom_circle() {
+  SMALL_TAB_OUTER_OFFSET = 17.8;
+  SMALL_TAB_CENTER_OFFSET =
+      BOTTOM_CIRCLE_INNER_DIAMETER / 2 - SMALL_TAB_OUTER_OFFSET;
+  SMALL_TAB_LENGTH = 5.1;
+  SMALL_TAB_HEIGHT = 13.6;
+
   // bottom circle
   translate([ 0, 0, -BOTTOM_CIRCLE_HEIGHT / 2 ]) {
     difference() {
@@ -137,11 +146,18 @@ module bottom_circle() {
     }
   }
 
-  SMALL_TAB_OUTER_OFFSET = 17.8;
-  SMALL_TAB_CENTER_OFFSET =
-      BOTTOM_CIRCLE_INNER_DIAMETER / 2 - SMALL_TAB_OUTER_OFFSET;
-  SMALL_TAB_LENGTH = 5.1;
-  SMALL_TAB_HEIGHT = 13.6;
+  // Supporting chamfer around inside of circle
+  CHAMFER_WIDTH = 20;
+  translate([ 0, 0, -BOTTOM_DIVIDER_LINE_HEIGHT / 2 ]) {
+    difference() {
+      cylinder(h = BOTTOM_DIVIDER_LINE_HEIGHT, d = BOTTOM_CIRCLE_INNER_DIAMETER,
+               center = true);
+      cylinder(h = BOTTOM_DIVIDER_LINE_HEIGHT + 0.01,
+               d1 = BOTTOM_CIRCLE_INNER_DIAMETER,
+               d2 = BOTTOM_CIRCLE_INNER_DIAMETER - CHAMFER_WIDTH,
+               center = true);
+    }
+  }
 
   // divider line
   difference() {
@@ -270,7 +286,7 @@ module bottom_circle() {
 
 difference() {
   lid();
-  handle(0.5);
+  handle(0.4);
 }
 bottom_circle();
 
