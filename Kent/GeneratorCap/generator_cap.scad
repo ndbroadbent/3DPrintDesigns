@@ -12,7 +12,8 @@ module copy_rotate(vec) {
 }
 
 // Need to add 1mm so it's not such a sharp angle, easier to print
-LID_THICKNESS = 3.6 + 1;
+// Update - need to make the lid a bit thinner so it doesn't warp so much
+LID_THICKNESS = 2.3;
 LID_EDGE_THICKNESS = 1.35;
 
 LID_DIAMETER = 249;
@@ -102,9 +103,8 @@ module handle(tolerance = 0) {
 
           for (i = [ 0, -1, 1 ]) {
             translate([
-              bottom_width / 2,
-              bottom_length/2 + i * bottom_length/3,
-              -EPSILON
+              bottom_width / 2, bottom_length / 2 + i * bottom_length / 3, -
+              EPSILON
             ])
                 // cube([
                 //   bottom_width_shrunk - HANDLE_CUBE_WIDTH_MARGIN * 2,
@@ -284,17 +284,17 @@ module bottom_circle() {
   }
 }
 
-difference() {
-  lid();
-  handle(0.4);
-}
-bottom_circle();
+// difference() {
+//   lid();
+//   handle(0.4);
+// }
+// bottom_circle();
 
 // difference() {
 //   test_strip();
 //   handle(0.2);
 // }
 
-// handle();
+handle();
 
 // lid();
